@@ -4,6 +4,10 @@
  * @param {string} [param="asc"] param - the sorting type "asc" or "desc"
  * @returns {string[]}
  */
-export function sortStrings(arr, param = 'asc') {
-
+export function sortStrings(arr, param = "asc") {
+  return arr.toSorted((a, b) =>
+    new Intl.Collator("ru", { caseFirst: "upper" }).compare(
+      ...(param === "asc" ? [a, b] : [b, a]),
+    ),
+  );
 }
