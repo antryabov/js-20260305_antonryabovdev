@@ -4,5 +4,17 @@
  * @returns {function} - function-getter which allow get value from object by set path
  */
 export function createGetter(path) {
+  return (obj) => {
+    if (!Object.entries(obj).length) {
+      return undefined;
+    }
 
+    const splitPath = path.split(".").reverse();
+    let nestedProperty = obj[splitPath.pop()];
+    while (splitPath.length !== 0) {
+      nestedProperty = nestedProperty[splitPath.pop()];
+    }
+
+    return nestedProperty;
+  };
 }
