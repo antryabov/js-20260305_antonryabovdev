@@ -9,10 +9,20 @@ export function createGetter(path) {
       return undefined;
     }
 
-    const splitPath = path.split(".").reverse();
-    let nestedProperty = obj[splitPath.pop()];
-    while (splitPath.length !== 0) {
-      nestedProperty = nestedProperty[splitPath.pop()];
+    const splitPath = path.split(".");
+    // let nestedProperty = obj[splitPath.pop()];
+    // while (splitPath.length !== 0) {
+    //   nestedProperty = nestedProperty[splitPath.pop()];
+    // }
+    let nestedProperty;
+    let firstIteration = true;
+    for (const prop of splitPath) {
+      if (firstIteration) {
+        nestedProperty = obj[prop];
+        firstIteration = false;
+      } else {
+        nestedProperty = nestedProperty[prop];
+      }
     }
 
     return nestedProperty;
