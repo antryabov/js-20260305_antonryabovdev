@@ -14,15 +14,9 @@ export function createGetter(path) {
     // while (splitPath.length !== 0) {
     //   nestedProperty = nestedProperty[splitPath.pop()];
     // }
-    let nestedProperty;
-    let firstIteration = true;
+    let nestedProperty = obj;
     for (const prop of splitPath) {
-      if (firstIteration) {
-        nestedProperty = obj[prop];
-        firstIteration = false;
-      } else {
-        nestedProperty = nestedProperty[prop];
-      }
+      nestedProperty = nestedProperty[prop];
     }
 
     return nestedProperty;
