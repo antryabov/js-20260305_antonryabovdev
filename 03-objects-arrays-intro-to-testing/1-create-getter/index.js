@@ -4,21 +4,21 @@
  * @returns {function} - function-getter which allow get value from object by set path
  */
 export function createGetter(path) {
+  const splitPath = path.split(".");
   return (obj) => {
-    if (!Object.entries(obj).length) {
+    if (!obj) {
       return undefined;
     }
 
-    const splitPath = path.split(".");
-    // let nestedProperty = obj[splitPath.pop()];
-    // while (splitPath.length !== 0) {
-    //   nestedProperty = nestedProperty[splitPath.pop()];
-    // }
-    let nestedProperty = obj;
+    let result = obj;
     for (const prop of splitPath) {
-      nestedProperty = nestedProperty[prop];
+      if (Object.hasOwn(result, prop)) {
+        result = result[prop];
+      } else {
+        return undefined;
+      }
     }
 
-    return nestedProperty;
+    return result;
   };
 }
