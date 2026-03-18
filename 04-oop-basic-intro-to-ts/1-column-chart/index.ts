@@ -1,23 +1,23 @@
 import { createElement } from "../../shared/utils/create-element";
 
 interface Options {
-	data: number[];
-	label: string;
-	value: number;
+	data?: number[];
+	label?: string;
+	value?: number;
 	link?: string;
 	formatHeading?: (data: number) => string;
 }
 
 export default class ColumnChart {
 	public element: HTMLElement;
-	private chartHeight: number = 50;
+	chartHeight: number = 50;
 
 	constructor(private props: Options = { data: [], label: "", value: 0 }) {
 		this.element = createElement(this.chartContent());
 	}
 
 	private chartContent() {
-		const { data, label, link, value, formatHeading } = this.props;
+		const { data = [], label, link, value = 0, formatHeading } = this.props;
 
 		const isLoadingData = !data?.length ? "column-chart_loading" : "";
 		const hasLinkInChart = link
@@ -60,7 +60,7 @@ export default class ColumnChart {
 		return chartElements;
 	}
 
-	private update(data: number[]) {
+	update(data: number[]) {
 		const chartElements = this.dataHandler(data);
 		const chart = document.querySelector(".column-chart__chart");
 
@@ -70,10 +70,10 @@ export default class ColumnChart {
 		chart.innerHTML = "";
 		chart.insertAdjacentHTML("beforeend", chartElements);
 	}
-	private remove() {
+	remove() {
 		this.element.remove();
 	}
-	private destroy() {
+	destroy() {
 		this.element.remove();
 	}
 }
