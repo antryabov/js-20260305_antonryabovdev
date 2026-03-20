@@ -1,3 +1,4 @@
+
 import { createElement } from "../../shared/utils/create-element";
 
 interface Options {
@@ -78,4 +79,5 @@ export default class ColumnChart {
 	destroy() {
 		this.element.remove();
 	}
+
 }
