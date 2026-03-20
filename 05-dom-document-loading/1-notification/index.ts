@@ -47,7 +47,6 @@ export default class NotificationMessage {
 		NotificationMessage.activeNotificationMessage = this;
 		this.timer = setTimeout(() => {
 			this.remove();
-			// погрешность времени с анимацией
 		}, this.props.duration);
 	}
 	remove() {
