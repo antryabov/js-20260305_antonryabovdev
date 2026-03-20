@@ -10,6 +10,7 @@ interface Options {
 
 export default class ColumnChart {
 	public element: HTMLElement;
+	private elementContainer: string = '[data-element="body"]';
 	chartHeight: number = 50;
 
 	constructor(private props: Options = { data: [], label: "", value: 0 }) {
@@ -32,7 +33,7 @@ export default class ColumnChart {
 				<div class="column-chart__title">${label}${hasLinkInChart}</div>
 				<div class="column-chart__container">
 					<div class="column-chart__header" data-element="header">${chartValue}</div>
-					<div class="column-chart__chart">
+					<div class="column-chart__chart" data-element="body">
 						${chartElements}
 					</div>
 				</div>
@@ -45,7 +46,7 @@ export default class ColumnChart {
 	private dataHandler(data: number[]) {
 		if (!data || !data.length) return "";
 		const maxValue = Math.max(...data);
-		const scale = 50 / maxValue;
+		const scale = this.chartHeight / maxValue;
 
 		const chartElements = data
 			.map((chartValue) => {
@@ -62,13 +63,14 @@ export default class ColumnChart {
 
 	update(data: number[]) {
 		const chartElements = this.dataHandler(data);
-		const chart = document.querySelector(".column-chart__chart");
+		const chartContainer = document.querySelector(this.elementContainer);
 
-		if (!chart) {
+		if (!chartContainer) {
 			throw new Error("The chart is missing");
 		}
-		chart.innerHTML = "";
-		chart.insertAdjacentHTML("beforeend", chartElements);
+
+		chartContainer.innerHTML = "";
+		chartContainer.insertAdjacentHTML("beforeend", chartElements);
 	}
 	remove() {
 		this.element.remove();
