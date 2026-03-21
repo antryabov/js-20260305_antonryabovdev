@@ -80,7 +80,7 @@ export default class SortableTable {
 				(a, b) => ((a[field] as number) - (b[field] as number)) * isAscOrder,
 			);
 		} else {
-			const intl = Intl.Collator(["ru", "en"], {
+			const intl = new Intl.Collator(["ru", "en"], {
 				caseFirst: "upper",
 			});
 			sortedData = this.data.sort(
