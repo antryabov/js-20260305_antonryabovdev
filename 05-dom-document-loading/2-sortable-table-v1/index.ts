@@ -15,6 +15,10 @@ interface SortableTableHeader {
 export default class SortableTable {
 	element: HTMLElement;
 	private bodyContainer: string = '[data-element="body"]';
+	private activeAttributeOnHeader: HTMLElement | null = null;
+	private collator: Intl.Collator = new Intl.Collator(["ru", "en"], {
+		caseFirst: "upper",
+	});
 	constructor(
 		private headersConfig: SortableTableHeader[] = [],
 		private data: SortableTableData[] = [],
@@ -58,7 +62,8 @@ export default class SortableTable {
 						if (header.template) {
 							return header.template(product[header.id]);
 						}
-						return `<div class="sortable-table__cell">${product[header.id]}</div>`;
+						const isSortable = header.sortable ? "data-sortable" : "";
+						return `<div class="sortable-table__cell" ${isSortable} data-name="${header.title}">${product[header.id]}</div>`;
 					})
 					.join("");
 
@@ -76,19 +81,17 @@ export default class SortableTable {
 		const isAscOrder = order === "asc" ? 1 : -1;
 
 		if (header?.sortType === "number") {
-			sortedData = this.data.sort(
+			sortedData = [...this.data].sort(
 				(a, b) => ((a[field] as number) - (b[field] as number)) * isAscOrder,
 			);
 		} else {
-			const intl = new Intl.Collator(["ru", "en"], {
-				caseFirst: "upper",
-			});
-			sortedData = this.data.sort(
+			sortedData = [...this.data].sort(
 				(a, b) =>
-					intl.compare(a[field] as string, b[field] as string) * isAscOrder,
+					this.collator.compare(a[field] as string, b[field] as string) *
+					isAscOrder,
 			);
 		}
-		this.data = sortedData;
+		this.setOrderAttr(header.title, order);
 		const bodyElements = this.rowBodyRender(sortedData);
 
 		const tableBodyContainer = this.element.querySelector(this.bodyContainer);
@@ -98,10 +101,25 @@ export default class SortableTable {
 		tableBodyContainer.innerHTML = "";
 		tableBodyContainer.insertAdjacentHTML("beforeend", bodyElements);
 	}
+	private setOrderAttr(headerTitle: string, order: SortOrder) {
+		if (this.activeAttributeOnHeader) {
+			this.activeAttributeOnHeader.removeAttribute("data-order");
+		}
+		const sortHeaderElement: HTMLElement | null = this.element.querySelector(
+			`[data-name="${headerTitle}"]`,
+		);
+		if (!sortHeaderElement) {
+			throw new Error("The header is missing");
+		}
+		sortHeaderElement.dataset.order = order;
+		this.activeAttributeOnHeader = sortHeaderElement;
+	}
 	remove() {
 		this.element.remove();
+		this.activeAttributeOnHeader = null;
 	}
 	destroy() {
 		this.element.remove();
+		this.activeAttributeOnHeader = null;
 	}
 }
