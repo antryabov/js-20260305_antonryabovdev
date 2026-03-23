@@ -46,7 +46,7 @@ export default class SortableTable {
 				const hasSortType = sortType ? `data-sort-type="${sortType}"` : "";
 				const isSortable = sortable !== false ? "data-sortable" : "";
 				return `
-          <div class="sortable-table__cell" ${hasSortType} data-id="${id}" ${isSortable}>
+          <div class="sortable-table__cell sort-arrow" ${hasSortType} data-id="${id}" ${isSortable}>
             <span>${title}</span>
           </div>
         `;
@@ -62,8 +62,9 @@ export default class SortableTable {
 						if (header.template) {
 							return header.template(product[header.id]);
 						}
-						const isSortable = header.sortable ? "data-sortable" : "";
-						return `<div class="sortable-table__cell" ${isSortable} data-name="${header.title}">${product[header.id]}</div>`;
+
+						return `
+						<div class="sortable-table__cell"">${product[header.id]}</div>`;
 					})
 					.join("");
 
@@ -91,7 +92,7 @@ export default class SortableTable {
 					isAscOrder,
 			);
 		}
-		this.setOrderAttr(header.title, order);
+		this.setOrderAttr(header.id, order);
 		const bodyElements = this.rowBodyRender(sortedData);
 
 		const tableBodyContainer = this.element.querySelector(this.bodyContainer);
@@ -106,7 +107,7 @@ export default class SortableTable {
 			this.activeAttributeOnHeader.removeAttribute("data-order");
 		}
 		const sortHeaderElement: HTMLElement | null = this.element.querySelector(
-			`[data-name="${headerTitle}"]`,
+			`[data-id="${headerTitle}"]`,
 		);
 		if (!sortHeaderElement) {
 			throw new Error("The header is missing");
