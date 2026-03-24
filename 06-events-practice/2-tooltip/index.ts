@@ -58,7 +58,6 @@ export default class Tooltip {
 
 	destroy() {
 		this.element.remove();
-		Tooltip.instance = null;
 		document.body.removeEventListener("pointerover", this.pointerOver);
 		document.body.removeEventListener("pointermove", this.pointerMove);
 		document.body.removeEventListener("pointerout", this.pointerOut);
