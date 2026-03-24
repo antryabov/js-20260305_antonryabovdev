@@ -27,17 +27,16 @@ export default class SortableTable {
 	}
 
 	private render(): string {
-		const template = `
-      <div class="sortable-table">
-        <div class="sortable-table__header sortable-table__row" data-element="header">
-          ${this.tableHeaderRender()}
-        </div>
-        <div class="sortable-table__body" data-element="body">
-          ${this.rowBodyRender(this.data)}
-        </div>
-      </div>
-    `;
-		return template;
+		return `
+			<div class="sortable-table">
+				<div class="sortable-table__header sortable-table__row" data-element="header">
+				${this.tableHeaderRender()}
+				</div>
+				<div class="sortable-table__body" data-element="body">
+				${this.rowBodyRender(this.data)}
+				</div>
+			</div>
+			`;
 	}
 
 	private tableHeaderRender() {
