@@ -47,6 +47,9 @@ export default class SortableTable {
 				return `
           <div class="sortable-table__cell sort-arrow" ${hasSortType} data-id="${id}" ${isSortable}>
             <span>${title}</span>
+			<span class="sortable-table__sort-arrow" data-element="arrow">
+                  <span class="sort-arrow"></span>
+			</span>
           </div>
         `;
 			})
